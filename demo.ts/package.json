@@ -1,0 +1,11 @@
+{
+  "name": "demo.esm",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "commonjs",
+  "scripts": {},
+  "dependencies": {
+    "test-curved-poly": "file:./.."
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "test-curved-poly",
+  "version": "0.0.0",
+  "description": "",
+  "main": "./cjs/index.js",
+  "scripts": {
+    "build": "npm run cjs && npm run rollup:es && npm run rollup:babel && npm run min && npm run test",
+    "cjs": "ascjs esm cjs",
+    "rollup:es": "rollup --config rollup/es.config.js && sed -i.bck 's/^var /self./' es.js && rm -rf es.js.bck",
+    "rollup:babel": "rollup --config rollup/babel.config.js && sed -i.bck 's/^var /self./' index.js && rm -rf index.js.bck",
+    "min": "terser index.js --comments='/^!/' -c -m -o min.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.17.2",
+    "@babel/preset-env": "^7.16.11",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-node-resolve": "^13.1.3",
+    "ascjs": "^5.0.1",
+    "rollup": "^2.67.2",
+    "rollup-plugin-terser": "^7.0.2",
+    "terser": "^5.10.0"
+  },
+  "module": "./esm/index.js",
+  "types": "./esm/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "default": "./cjs/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "unpkg": "min.js"
+}
