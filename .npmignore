@@ -6,3 +6,11 @@ coverage/
 node_modules/
 rollup/
 test/
+
+.vscode/
+.prettierrc.json
+
+demo.cjs/
+demo.esm/
+demo.ts/
+demo.tsnode/
