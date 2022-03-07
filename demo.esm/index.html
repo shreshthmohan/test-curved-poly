@@ -7,6 +7,18 @@
     <title>Document</title>
   </head>
   <body>
+    <canvas class="hidden" id="canvas-from-svg"></canvas>
+    <button
+      class="absolute text-xs text-gray-200 bg-gray-700 font-sans px-1 py-0.5 rounded-sm cursor-pointer"
+      style="top: 5px; left: 5px"
+      onclick="downloadImage()"
+    >
+      Download image
+    </button>
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/canvg@3.0.4/lib/umd.js"
+    ></script>
     <script src="./bundle.js"></script>
   </body>
 </html>

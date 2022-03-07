@@ -17,6 +17,21 @@ export function roundedPolygonBySideLength(_a) {
     var dForPath = pointsToDForPath({ allPoints: allPoints, borderRadius: borderRadius, alpha: alpha });
     return dForPath;
 }
+export function roundedPolygonByCircumRadius(_a) {
+    var circumRadius = _a.circumRadius, _b = _a.sideCount, sideCount = _b === void 0 ? 3 : _b, _c = _a.borderRadius, borderRadius = _c === void 0 ? 0 : _c, _d = _a.cx, cx = _d === void 0 ? 0 : _d, _e = _a.cy, cy = _e === void 0 ? 0 : _e;
+    var alpha = angleIntendedByPolygonSide(sideCount);
+    var radiusOfInnerPolygon = circumRadius - borderRadius / Math.cos(alpha / 2);
+    var allPoints = getAllPointsOnCurvedPolygon({
+        sideCount: sideCount,
+        radiusOfInnerPolygon: radiusOfInnerPolygon,
+        borderRadius: borderRadius,
+        alpha: alpha,
+        cx: cx,
+        cy: cy
+    });
+    var dForPath = pointsToDForPath({ allPoints: allPoints, borderRadius: borderRadius, alpha: alpha });
+    return dForPath;
+}
 // returns d attribute used in the SVG <path> element
 function pointsToDForPath(_a) {
     var allPoints = _a.allPoints, borderRadius = _a.borderRadius, alpha = _a.alpha;
@@ -51,18 +66,21 @@ function getAllPointsOnCurvedPolygon(_a) {
     });
     return allShiftedPoints;
 }
+function angleIntendedByPolygonSide(sideCount) {
+    return (2 * PI) / sideCount;
+}
 function polygonSideToCircleRadius(_a) {
     var sideLength = _a.sideLength, sideCount = _a.sideCount;
-    // angle intended by size of polygon onto the circumscribed circle
+    // angle intended by side of polygon onto the circumscribed circle
     // unit: radians
     // alias: alpha
-    var angleIntendedBySide = (2 * PI) / sideCount;
+    var angleIntendedBySide = angleIntendedByPolygonSide(sideCount);
     var circumcircleRadius = sideLength / (2 * Math.sin(angleIntendedBySide / 2));
     return { circumcircleRadius: circumcircleRadius, angleIntendedBySide: angleIntendedBySide };
 }
 // Did not keep it in polar, because the calculation gets complicated
 function addPolarPointVectorsAndConvertToCartesian(p1, p2) {
-    // angle 0 corresponds to 12 o'clock
+    // TODO: what does 0 radian correspond to?
     var a1 = p1[0], r1 = p1[1];
     var a2 = p2[0], r2 = p2[1];
     var y1 = r1 * Math.cos(a1);

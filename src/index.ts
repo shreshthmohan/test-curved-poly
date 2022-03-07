@@ -39,6 +39,36 @@ export function roundedPolygonBySideLength({
   return dForPath
 }
 
+export function roundedPolygonByCircumRadius({
+  circumRadius,
+  sideCount = 3,
+  borderRadius = 0,
+  cx = 0,
+  cy = 0,
+}: {
+  circumRadius: number
+  sideCount: number
+  borderRadius?: number
+  cx?: number
+  cy?: number
+}) {
+  const alpha = angleIntendedByPolygonSide(sideCount)
+
+  const radiusOfInnerPolygon = circumRadius - borderRadius / Math.cos(alpha / 2)
+
+  const allPoints = getAllPointsOnCurvedPolygon({
+    sideCount,
+    radiusOfInnerPolygon,
+    borderRadius,
+    alpha,
+    cx,
+    cy,
+  })
+
+  const dForPath: string = pointsToDForPath({ allPoints, borderRadius, alpha })
+  return dForPath
+}
+
 // returns d attribute used in the SVG <path> element
 function pointsToDForPath({
   allPoints,
@@ -102,6 +132,10 @@ function getAllPointsOnCurvedPolygon({
   return allShiftedPoints
 }
 
+function angleIntendedByPolygonSide(sideCount: number): number {
+  return (2 * PI) / sideCount
+}
+
 function polygonSideToCircleRadius({
   sideLength,
   sideCount,
@@ -109,10 +143,10 @@ function polygonSideToCircleRadius({
   sideLength: number
   sideCount: number
 }): { circumcircleRadius: number; angleIntendedBySide: number } {
-  // angle intended by size of polygon onto the circumscribed circle
+  // angle intended by side of polygon onto the circumscribed circle
   // unit: radians
   // alias: alpha
-  const angleIntendedBySide = (2 * PI) / sideCount
+  const angleIntendedBySide = angleIntendedByPolygonSide(sideCount)
 
   const circumcircleRadius =
     sideLength / (2 * Math.sin(angleIntendedBySide / 2))
@@ -125,7 +159,7 @@ function addPolarPointVectorsAndConvertToCartesian(
   p1: PolarPoint,
   p2: PolarPoint,
 ): CartesianPoint {
-  // angle 0 corresponds to 12 o'clock
+  // TODO: what does 0 radian correspond to?
   const [a1, r1] = p1
   const [a2, r2] = p2
 
